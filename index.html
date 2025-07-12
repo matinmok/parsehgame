@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گیم نت پارس - مرجع بازی‌های کنسول</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Vazirmatn', sans-serif; }
+        
+        /* PS5 Modern Style */
+        body {
+            background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+            min-height: 100vh;
+        }
+        
+        .ps5-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .ps5-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            box-shadow: 0 20px 40px rgba(0, 123, 255, 0.3);
+        }
+        
+        .ps5-button {
+            background: linear-gradient(145deg, #0070f3, #0051cc);
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 112, 243, 0.3);
+        }
+        
+        .ps5-button:hover {
+            background: linear-gradient(145deg, #0051cc, #003d99);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 112, 243, 0.4);
+        }
+        
+        .ps5-button.active {
+            background: linear-gradient(145deg, #ff6b35, #e55a2b);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .header-glow {
+            background: linear-gradient(90deg, rgba(0, 112, 243, 0.1), rgba(255, 255, 255, 0.1), rgba(0, 112, 243, 0.1));
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-container {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+        
+        .platform-chip {
+            background: linear-gradient(45deg, rgba(0, 112, 243, 0.8), rgba(0, 81, 204, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            margin: 2px;
+            display: inline-block;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .platform-ps5 { 
+            background: linear-gradient(45deg, #0070f3, #0051cc);
+            box-shadow: 0 2px 8px rgba(0, 112, 243, 0.3);
+        }
+        .platform-ps4 { 
+            background: linear-gradient(45deg, #0051cc, #003d99);
+            box-shadow: 0 2px 8px rgba(0, 81, 204, 0.3);
+        }
+        .platform-xbox { 
+            background: linear-gradient(45deg, #107c10, #0d5f0d);
+            box-shadow: 0 2px 8px rgba(16, 124, 16, 0.3);
+        }
+        .platform-switch { 
+            background: linear-gradient(45deg, #e60012, #cc0010);
+            box-shadow: 0 2px 8px rgba(230, 0, 18, 0.3);
+        }
+        
+        .rating-excellent { color: #22c55e; text-shadow: 0 0 10px rgba(34, 197, 94, 0.5); }
+        .rating-great { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        .rating-good { color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); }
+        
+        .game-image {
+            font-size: 3rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+        
+        .ps5-title {
+            background: linear-gradient(45deg, #0070f3, #ff6b35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating { animation: float 6s ease-in-out infinite; }
+        
+        .stats-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+    <!-- PS5 Style Header -->
+    <header class="header-glow sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6 space-x-reverse">
+                    <h1 class="text-4xl font-bold ps5-title floating">🎮 گیم نت پارس</h1>
+                    <span class="text-lg text-blue-200 font-medium">مرجع بازی‌های کنسول</span>
+                </div>
+                <nav class="hidden md:flex space-x-4 space-x-reverse">
+                    <button onclick="filterGames('all')" class="filter-btn ps5-button px-6 py-3 text-white font-medium rounded-xl">همه بازی‌ها</button>
+                    <button onclick="filterGames('PS5')" class="filter-btn ps5-button px-6 py-3 text-white font-medium rounded-xl">PS5</button>
+                    <button onclick="filterGames('PS4')" class="filter-btn ps5-button px-6 py-3 text-white font-medium rounded-xl">PS4</button>
+                    <button onclick="filterGames('Xbox')" class="filter-btn ps5-button px-6 py-3 text-white font-medium rounded-xl">Xbox</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="container mx-auto px-6 py-12 text-center">
+        <h2 class="text-5xl font-bold mb-6 ps5-title">بهترین بازی‌های دنیا</h2>
+        <p class="text-xl text-blue-200 mb-8 opacity-90">کشف کن، بازی کن، لذت ببر</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="container mx-auto px-6 mb-12">
+        <div class="max-w-2xl mx-auto">
+            <div class="search-container p-6">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="🔍 جستجوی بازی مورد علاقه..."
+                    class="w-full px-6 py-4 bg-transparent border-none outline-none text-white text-lg placeholder-blue-200"
+                    oninput="searchGames()"
+                >
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Filters -->
+    <div class="md:hidden container mx-auto px-6 mb-8">
+        <div class="grid grid-cols-4 gap-3">
+            <button onclick="filterGames('all')" class="filter-btn-mobile ps5-button py-3 text-white font-medium rounded-xl text-sm">همه</button>
+            <button onclick="filterGames('PS5')" class="filter-btn-mobile ps5-button py-3 text-white font-medium rounded-xl text-sm">PS5</button>
+            <button onclick="filterGames('PS4')" class="filter-btn-mobile ps5-button py-3 text-white font-medium rounded-xl text-sm">PS4</button>
+            <button onclick="filterGames('Xbox')" class="filter-btn-mobile ps5-button py-3 text-white font-medium rounded-xl text-sm">Xbox</button>
+        </div>
+    </div>
+
+    <!-- Game Stats -->
+    <div class="container mx-auto px-6 mb-12">
+        <div class="grid grid-cols-3 gap-6">
+            <div class="stats-card p-6 text-center">
+                <div class="text-3xl font-bold text-blue-400 mb-2" id="totalGames">78</div>
+                <div class="text-blue-200 font-medium">کل بازی‌ها</div>
+            </div>
+            <div class="stats-card p-6 text-center">
+                <div class="text-3xl font-bold text-blue-300 mb-2" id="psGames">45</div>
+                <div class="text-blue-200 font-medium">PlayStation</div>
+            </div>
+            <div class="stats-card p-6 text-center">
+                <div class="text-3xl font-bold text-green-400 mb-2" id="xboxGames">33</div>
+                <div class="text-blue-200 font-medium">Xbox</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Grid -->
+    <div class="container mx-auto px-6 pb-16">
+        <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Games will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Game Details Modal -->
+    <div id="gameModal" class="fixed inset-0 bg-black bg-opacity-75 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="ps5-card max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="relative p-8">
+                    <button onclick="closeGameDetails()" class="absolute top-4 left-4 ps5-button w-10 h-10 rounded-full flex items-center justify-center text-white">
+                        ✕
+                    </button>
+                    <div id="modalContent">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="header-glow py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h3 class="text-3xl font-bold mb-4 ps5-title">🎮 گیم نت پارس</h3>
+            <p class="text-blue-200 mb-2">© 2024 گیم نت پارس - همه حقوق محفوظ است</p>
+            <p class="text-lg text-blue-300 font-medium">بهترین مرجع بازی‌های کنسول</p>
+        </div>
+    </footer>
+
+    <script>
+        // بازی‌های محبوب بدون PC
+        const games = [
+            // بازی‌های اختصاصی PS5
+            { name: "God of War Ragnarök", platforms: ["PS5"], genre: "اکشن/ماجراجویی", rating: 9.5, image: "⚔️" },
+            { name: "Spider-Man 2", platforms: ["PS5"], genre: "اکشن", rating: 9.2, image: "🕷️" },
+            { name: "Horizon Forbidden West", platforms: ["PS5", "PS4"], genre: "اکشن/نقش‌آفرینی", rating: 9.0, image: "🏹" },
+            { name: "Demon's Souls", platforms: ["PS5"], genre: "نقش‌آفرینی", rating: 9.1, image: "👹" },
+            { name: "Ratchet & Clank: Rift Apart", platforms: ["PS5"], genre: "اکشن/ماجراجویی", rating: 8.8, image: "🔫" },
+            { name: "Returnal", platforms: ["PS5"], genre: "تیراندازی", rating: 8.7, image: "🌌" },
+            { name: "Gran Turismo 7", platforms: ["PS5", "PS4"], genre: "مسابقه‌ای", rating: 8.5, image: "🏎️" },
+            { name: "The Last of Us Part I", platforms: ["PS5"], genre: "ماجراجویی", rating: 9.4, image: "🧟" },
+            { name: "Ghost of Tsushima Director's Cut", platforms: ["PS5"], genre: "اکشن/ماجراجویی", rating: 9.3, image: "⛩️" },
+            { name: "Final Fantasy XVI", platforms: ["PS5"], genre: "نقش‌آفرینی", rating: 8.9, image: "⚡" },
+
+            // بازی‌های اختصاصی PS4
+            { name: "God of War (2018)", platforms: ["PS4"], genre: "اکشن/ماجراجویی", rating: 9.7, image: "🪓" },
+            { name: "The Last of Us Part II", platforms: ["PS4"], genre: "ماجراجویی", rating: 9.1, image: "🦋" },
+            { name: "Spider-Man", platforms: ["PS4"], genre: "اکشن", rating: 9.2, image: "🕷️" },
+            { name: "Bloodborne", platforms: ["PS4"], genre: "نقش‌آفرینی", rating: 9.4, image: "🩸" },
+            { name: "Uncharted 4: A Thief's End", platforms: ["PS4"], genre: "ماجراجویی", rating: 9.5, image: "💎" },
+            { name: "Ghost of Tsushima", platforms: ["PS4"], genre: "اکشن/ماجراجویی", rating: 9.1, image: "⛩️" },
+            { name: "Horizon Zero Dawn", platforms: ["PS4"], genre: "اکشن/نقش‌آفرینی", rating: 9.0, image: "🤖" },
+            { name: "Persona 5 Royal", platforms: ["PS4", "PS5"], genre: "نقش‌آفرینی", rating: 9.6, image: "🎭" },
+            { name: "Detroit: Become Human", platforms: ["PS4"], genre: "ماجراجویی", rating: 8.8, image: "🤖" },
+            { name: "Days Gone", platforms: ["PS4"], genre: "اکشن/ماجراجویی", rating: 8.3, image: "🏍️" },
+
+            // بازی‌های اختصاصی Xbox
+            { name: "Halo Infinite", platforms: ["Xbox"], genre: "تیراندازی", rating: 8.7, image: "👽" },
+            { name: "Forza Horizon 5", platforms: ["Xbox"], genre: "مسابقه‌ای", rating: 9.3, image: "🏁" },
+            { name: "Gears 5", platforms: ["Xbox"], genre: "تیراندازی", rating: 8.6, image: "⚙️" },
+            { name: "Microsoft Flight Simulator", platforms: ["Xbox"], genre: "شبیه‌سازی", rating: 9.0, image: "✈️" },
+            { name: "Sea of Thieves", platforms: ["Xbox"], genre: "ماجراجویی", rating: 8.5, image: "🏴‍☠️" },
+            { name: "Starfield", platforms: ["Xbox"], genre: "نقش‌آفرینی", rating: 8.4, image: "🚀" },
+            { name: "Hi-Fi Rush", platforms: ["Xbox"], genre: "اکشن", rating: 9.0, image: "🎵" },
+            { name: "Forza Motorsport", platforms: ["Xbox"], genre: "مسابقه‌ای", rating: 8.8, image: "🏎️" },
+            { name: "Halo: The Master Chief Collection", platforms: ["Xbox"], genre: "تیراندازی", rating: 9.2, image: "🎯" },
+            { name: "Ori and the Will of the Wisps", platforms: ["Xbox"], genre: "پلتفرمر", rating: 9.1, image: "🌟" },
+
+            // بازی‌های چندپلتفرمی محبوب
+            { name: "Elden Ring", platforms: ["PS5", "PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 9.8, image: "💍" },
+            { name: "The Witcher 3: Wild Hunt", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "نقش‌آفرینی", rating: 9.8, image: "🐺" },
+            { name: "Red Dead Redemption 2", platforms: ["PS4", "Xbox"], genre: "اکشن/ماجراجویی", rating: 9.7, image: "🤠" },
+            { name: "Grand Theft Auto V", platforms: ["PS5", "PS4", "Xbox"], genre: "اکشن/ماجراجویی", rating: 9.5, image: "🚗" },
+            { name: "Cyberpunk 2077", platforms: ["PS5", "PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 8.5, image: "🤖" },
+            { name: "Assassin's Creed Valhalla", platforms: ["PS5", "PS4", "Xbox"], genre: "اکشن/ماجراجویی", rating: 8.5, image: "🪓" },
+            { name: "Call of Duty: Modern Warfare III", platforms: ["PS5", "PS4", "Xbox"], genre: "تیراندازی", rating: 8.4, image: "🔫" },
+            { name: "FIFA 24", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "ورزشی", rating: 8.3, image: "⚽" },
+            { name: "Baldur's Gate 3", platforms: ["PS5", "Xbox"], genre: "نقش‌آفرینی", rating: 9.6, image: "🎲" },
+            { name: "Sekiro: Shadows Die Twice", platforms: ["PS4", "Xbox"], genre: "اکشن", rating: 9.2, image: "🥷" },
+
+            // بازی‌های محبوب آنلاین
+            { name: "Minecraft", platforms: ["PS4", "Xbox", "Switch"], genre: "ساندباکس", rating: 9.2, image: "🧱" },
+            { name: "Fortnite", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "بتل رویال", rating: 8.4, image: "🏗️" },
+            { name: "Apex Legends", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "بتل رویال", rating: 8.7, image: "👑" },
+            { name: "Rocket League", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "ورزشی", rating: 8.8, image: "🚗" },
+            { name: "Overwatch 2", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "تیراندازی", rating: 8.0, image: "🎯" },
+            { name: "DOOM Eternal", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "تیراندازی", rating: 9.1, image: "👹" },
+            { name: "Control", platforms: ["PS5", "PS4", "Xbox"], genre: "اکشن/ماجراجویی", rating: 8.8, image: "🌀" },
+            { name: "Resident Evil Village", platforms: ["PS5", "PS4", "Xbox"], genre: "ترسناک", rating: 9.0, image: "🧛" },
+            { name: "It Takes Two", platforms: ["PS5", "PS4", "Xbox"], genre: "ماجراجویی", rating: 9.2, image: "💕" },
+            { name: "Hades", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "نقش‌آفرینی", rating: 9.4, image: "🔥" },
+
+            // بازی‌های کلاسیک و محبوب
+            { name: "Dark Souls III", platforms: ["PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 9.4, image: "⚔️" },
+            { name: "Monster Hunter World", platforms: ["PS4", "Xbox"], genre: "اکشن/نقش‌آفرینی", rating: 9.0, image: "🦖" },
+            { name: "Hollow Knight", platforms: ["PS4", "Xbox", "Switch"], genre: "پلتفرمر", rating: 9.3, image: "🗡️" },
+            { name: "Celeste", platforms: ["PS4", "Xbox", "Switch"], genre: "پلتفرمر", rating: 9.5, image: "⛰️" },
+            { name: "Stardew Valley", platforms: ["PS4", "Xbox", "Switch"], genre: "شبیه‌سازی", rating: 9.1, image: "🌾" },
+            { name: "Among Us", platforms: ["PS4", "PS5", "Xbox", "Switch"], genre: "اجتماعی", rating: 8.2, image: "👾" },
+            { name: "Fall Guys", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "پارتی", rating: 8.0, image: "🏃" },
+            { name: "Cuphead", platforms: ["PS4", "Xbox", "Switch"], genre: "پلتفرمر", rating: 8.9, image: "☕" },
+            { name: "Dead Cells", platforms: ["PS4", "Xbox", "Switch"], genre: "اکشن", rating: 9.0, image: "💀" },
+            { name: "Subnautica", platforms: ["PS4", "Xbox", "Switch"], genre: "ماجراجویی", rating: 8.9, image: "🌊" },
+
+            // بازی‌های اضافی
+            { name: "No Man's Sky", platforms: ["PS5", "PS4", "Xbox", "Switch"], genre: "ماجراجویی", rating: 8.3, image: "🚀" },
+            { name: "Terraria", platforms: ["PS4", "Xbox", "Switch"], genre: "ساندباکس", rating: 9.2, image: "⛏️" },
+            { name: "The Elder Scrolls V: Skyrim", platforms: ["PS4", "PS5", "Xbox", "Switch"], genre: "نقش‌آفرینی", rating: 9.6, image: "🏔️" },
+            { name: "Fallout 4", platforms: ["PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 8.7, image: "☢️" },
+            { name: "Assassin's Creed Odyssey", platforms: ["PS4", "Xbox"], genre: "اکشن/ماجراجویی", rating: 8.6, image: "🏛️" },
+            { name: "Watch Dogs: Legion", platforms: ["PS5", "PS4", "Xbox"], genre: "اکشن", rating: 7.9, image: "📱" },
+            { name: "Far Cry 6", platforms: ["PS5", "PS4", "Xbox"], genre: "اکشن", rating: 8.2, image: "🌴" },
+            { name: "Psychonauts 2", platforms: ["PS4", "Xbox"], genre: "پلتفرمر", rating: 8.9, image: "🧠" },
+            { name: "Ori and the Blind Forest", platforms: ["Xbox", "Switch"], genre: "پلتفرمر", rating: 9.0, image: "🌳" },
+            { name: "Until Dawn", platforms: ["PS4"], genre: "ترسناک", rating: 8.9, image: "🌙" },
+
+            // RPG کلاسیک
+            { name: "Divinity: Original Sin 2", platforms: ["PS4", "Xbox", "Switch"], genre: "نقش‌آفرینی", rating: 9.5, image: "🧙" },
+            { name: "Mass Effect Legendary Edition", platforms: ["PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 9.3, image: "🚀" },
+            { name: "Nioh 2", platforms: ["PS5", "PS4"], genre: "نقش‌آفرینی", rating: 8.9, image: "👹" },
+            { name: "Dragon Age: Inquisition", platforms: ["PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 8.7, image: "🐉" },
+            { name: "Final Fantasy VII Remake", platforms: ["PS5", "PS4"], genre: "نقش‌آفرینی", rating: 9.2, image: "⚡" },
+            { name: "Tales of Arise", platforms: ["PS5", "PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 8.8, image: "🗡️" },
+            { name: "Yakuza: Like a Dragon", platforms: ["PS5", "PS4", "Xbox"], genre: "نقش‌آفرینی", rating: 8.9, image: "🐉" },
+            { name: "Persona 4 Golden", platforms: ["PS4", "Xbox", "Switch"], genre: "نقش‌آفرینی", rating: 9.3, image: "🌅" }
+        ];
+
+        let filteredGames = [...games];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            displayGames(games);
+            updateStats();
+        });
+
+        function displayGames(gamesToShow) {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = '';
+
+            gamesToShow.forEach(game => {
+                const gameCard = createGameCard(game);
+                grid.appendChild(gameCard);
+            });
+        }
+
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'ps5-card p-6';
+            
+            const platformsHtml = game.platforms.map(platform => {
+                let platformClass = 'platform-chip ';
+                if (platform === 'PS5') platformClass += 'platform-ps5';
+                else if (platform === 'PS4') platformClass += 'platform-ps4';
+                else if (platform === 'Xbox') platformClass += 'platform-xbox';
+                else if (platform === 'Switch') platformClass += 'platform-switch';
+                
+                return `<span class="${platformClass}">${platform}</span>`;
+            }).join('');
+            
+            const ratingClass = game.rating >= 9.0 ? 'rating-excellent' : 
+                               game.rating >= 8.5 ? 'rating-great' : 'rating-good';
+            
+            card.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <span class="game-image">${game.image}</span>
+                    <div class="text-left">
+                        <div class="text-xs text-blue-300 mb-2 font-medium">پلتفرم‌ها:</div>
+                        <div>${platformsHtml}</div>
+                    </div>
+                </div>
+                <h3 class="text-xl font-bold mb-3 text-white leading-tight">${game.name}</h3>
+                <p class="text-sm text-blue-300 mb-4 font-medium">${game.genre}</p>
+                <div class="flex items-center justify-between">
+                    <span class="${ratingClass} font-bold text-lg">
+                        ⭐ ${game.rating}
+                    </span>
+                    <button onclick="showGameDetails('${game.name}')" class="ps5-button px-4 py-2 text-white font-medium rounded-lg text-sm">
+                        مشاهده جزئیات
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function filterGames(platform) {
+            if (platform === 'all') {
+                filteredGames = [...games];
+            } else {
+                filteredGames = games.filter(game => game.platforms.includes(platform));
+            }
+            
+            displayGames(filteredGames);
+            updateActiveFilter(platform);
+            updateStats();
+        }
+
+        function updateActiveFilter(activePlatform) {
+            const buttons = document.querySelectorAll('.filter-btn, .filter-btn-mobile');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            buttons.forEach(btn => {
+                const btnText = btn.textContent.trim();
+                if ((activePlatform === 'all' && btnText.includes('همه')) ||
+                    (activePlatform === 'PS5' && btnText === 'PS5') ||
+                    (activePlatform === 'PS4' && btnText === 'PS4') ||
+                    (activePlatform === 'Xbox' && btnText === 'Xbox')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function searchGames() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = filteredGames.filter(game => 
+                game.name.toLowerCase().includes(searchTerm) ||
+                game.genre.toLowerCase().includes(searchTerm) ||
+                game.platforms.some(platform => platform.toLowerCase().includes(searchTerm))
+            );
+            displayGames(filtered);
+        }
+
+        function updateStats() {
+            const totalGames = filteredGames.length;
+            const psGames = filteredGames.filter(game => 
+                game.platforms.some(p => p.includes('PS'))
+            ).length;
+            const xboxGames = filteredGames.filter(game => 
+                game.platforms.includes('Xbox')
+            ).length;
+            
+            document.getElementById('totalGames').textContent = totalGames;
+            document.getElementById('psGames').textContent = psGames;
+            document.getElementById('xboxGames').textContent = xboxGames;
+        }
+
+        // Game Details Functions
+        function showGameDetails(gameName) {
+            const game = games.find(g => g.name === gameName);
+            if (!game) return;
+
+            const modal = document.getElementById('gameModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const platformsHtml = game.platforms.map(platform => {
+                let platformClass = 'platform-chip ';
+                if (platform === 'PS5') platformClass += 'platform-ps5';
+                else if (platform === 'PS4') platformClass += 'platform-ps4';
+                else if (platform === 'Xbox') platformClass += 'platform-xbox';
+                else if (platform === 'Switch') platformClass += 'platform-switch';
+                
+                return `<span class="${platformClass}">${platform}</span>`;
+            }).join('');
+
+            const ratingClass = game.rating >= 9.0 ? 'rating-excellent' : 
+                               game.rating >= 8.5 ? 'rating-great' : 'rating-good';
+
+            const gameDescriptions = {
+                "God of War Ragnarök": "ادامه‌ای حماسی از سری گاد آف وار که کریتوس و آترئوس را در سفری هیجان‌انگیز در دنیای اساطیر نورس همراهی می‌کند.",
+                "Spider-Man 2": "جدیدترین ماجراجویی مرد عنکبوت با گرافیک خیره‌کننده و گیم‌پلی بهبود یافته در شهر نیویورک.",
+                "Elden Ring": "شاهکار هیدتاکا میازاکی که دنیای باز و داستان عمیق را با مبارزات چالش‌برانگیز ترکیب می‌کند.",
+                "The Witcher 3: Wild Hunt": "یکی از بهترین بازی‌های نقش‌آفرینی تمام دوران با داستان فوق‌العاده و دنیای عظیم.",
+                "Halo Infinite": "بازگشت اصیل ماستر چیف در این نسخه جدید از سری محبوب هیلو.",
+                "Forza Horizon 5": "بهترین بازی مسابقه‌ای موجود با گرافیک فوق‌العاده و تنوع بالا."
+            };
+
+            const screenshots = {
+                "God of War Ragnarök": ["⚔️", "🏔️", "🐻", "❄️"],
+                "Spider-Man 2": ["🕷️", "🏙️", "🌃", "🕸️"], 
+                "Elden Ring": ["💍", "🏰", "⚔️", "🌙"],
+                "The Witcher 3: Wild Hunt": ["🐺", "🏰", "⚡", "🗡️"],
+                "Halo Infinite": ["👽", "🔫", "🚀", "⭐"],
+                "Forza Horizon 5": ["🏁", "🏎️", "🌵", "🏜️"]
+            };
+
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <div class="text-center mb-6">
+                            <span class="text-8xl block mb-4">${game.image}</span>
+                            <h2 class="text-3xl font-bold text-white mb-2">${game.name}</h2>
+                            <p class="text-blue-300 text-lg">${game.genre}</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-white mb-3">امتیاز بازی</h3>
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <span class="${ratingClass} text-2xl font-bold">⭐ ${game.rating}</span>
+                                <div class="flex-1 bg-gray-700 rounded-full h-3">
+                                    <div class="h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-500" style="width: ${(game.rating / 10) * 100}%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-white mb-3">پلتفرم‌های موجود</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${platformsHtml}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-white mb-3">درباره بازی</h3>
+                            <p class="text-blue-200 leading-relaxed">
+                                ${gameDescriptions[game.name] || 'یکی از بهترین بازی‌های موجود در ژانر خود که تجربه‌ای فراموش‌نشدنی را برای بازیکنان فراهم می‌کند.'}
+                            </p>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-white mb-3">اسکرین‌شات‌ها</h3>
+                            <div class="grid grid-cols-4 gap-2">
+                                ${(screenshots[game.name] || ['🎮', '🎯', '⭐', '🏆']).map(img => 
+                                    `<div class="aspect-square bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-2xl">${img}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-white mb-3">ویژگی‌های کلیدی</h3>
+                            <ul class="space-y-2 text-blue-200">
+                                <li class="flex items-center space-x-2 space-x-reverse">
+                                    <span class="text-green-400">✓</span>
+                                    <span>گرافیک فوق‌العاده و کیفیت بالا</span>
+                                </li>
+                                <li class="flex items-center space-x-2 space-x-reverse">
+                                    <span class="text-green-400">✓</span>
+                                    <span>داستان جذاب و شخصیت‌پردازی عمیق</span>
+                                </li>
+                                <li class="flex items-center space-x-2 space-x-reverse">
+                                    <span class="text-green-400">✓</span>
+                                    <span>گیم‌پلی متنوع و سرگرم‌کننده</span>
+                                </li>
+                                <li class="flex items-center space-x-2 space-x-reverse">
+                                    <span class="text-green-400">✓</span>
+                                    <span>ساعت‌ها محتوای قابل بازی</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="flex space-x-3 space-x-reverse">
+                            <button class="ps5-button px-6 py-3 text-white font-medium rounded-xl flex-1">
+                                🛒 خرید بازی
+                            </button>
+                            <button class="ps5-button px-6 py-3 text-white font-medium rounded-xl flex-1">
+                                ❤️ افزودن به علاقه‌مندی‌ها
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGameDetails() {
+            const modal = document.getElementById('gameModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('gameModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGameDetails();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeGameDetails();
+            }
+        });
+
+        // Dark mode support
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+</body>
+</html>
