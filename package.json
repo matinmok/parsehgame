@@ -1,24 +1,28 @@
 {
   "name": "ardisk-vpn-bot",
   "version": "1.0.0",
-  "description": "ARDISK VPN Sales Bot",
+  "description": "ARDISK VPN Sales Bot - Complete Telegram Bot for VPN Service Sales",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "setup": "node database/init.js"
   },
+  "keywords": ["telegram", "bot", "vpn", "sales", "marzban"],
+  "author": "ARDISK",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
+    "node-telegram-bot-api": "^0.64.0",
     "sqlite3": "^5.1.6",
-    "axios": "^1.6.0",
-    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "node-cron": "^3.0.3"
+    "axios": "^1.6.0",
+    "node-cron": "^3.0.3",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
-  },
-  "engines": {
-    "node": ">=16"
   }
 }
